@@ -147,7 +147,7 @@ export default function SDNIsolationForestDemo() {
             </motion.div>
 
             <h1 className="text-4xl font-bold tracking-tight md:text-6xl">
-              SDN Anomaly Detection Demo
+              SDN Anomaly Detection 
             </h1>
 
             <p className="max-w-3xl text-lg leading-8 text-slate-300">
