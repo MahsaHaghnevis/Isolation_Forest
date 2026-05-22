@@ -91,7 +91,11 @@ function Button({ children, onClick, disabled, variant = "primary" }) {
 }
 
 function Card({ children, className = "" }) {
-  return <div className={`rounded-3xl border border-slate-800 bg-slate-900/70 ${className}`}>{children}</div>;
+  return (
+    <div className={`rounded-3xl border border-slate-800 bg-slate-900/70 ${className}`}>
+      {children}
+    </div>
+  );
 }
 
 function Metric({ label, value }) {
@@ -113,14 +117,17 @@ export default function SDNIsolationForestDemo() {
   const runPipeline = () => {
     setRunning(true);
     setActiveStep(1);
+
     let step = 1;
     const timer = setInterval(() => {
       step += 1;
+
       if (step > pipelineSteps.length) {
         clearInterval(timer);
         setRunning(false);
         return;
       }
+
       setActiveStep(step);
     }, 1400);
   };
@@ -138,20 +145,26 @@ export default function SDNIsolationForestDemo() {
               <Server className="h-4 w-4" />
               SDN Security Demo · Isolation Forest
             </motion.div>
+
             <h1 className="text-4xl font-bold tracking-tight md:text-6xl">
               SDN Anomaly Detection Demo
             </h1>
+
             <p className="max-w-3xl text-lg leading-8 text-slate-300">
-              This webpage explains what SDN is, how network traffic can include attacks, how SDN reacts, and then shows our Isolation Forest demo results.
+              This webpage explains what SDN is, how network traffic can include attacks,
+              how SDN reacts, and then shows our Isolation Forest demo results.
             </p>
           </div>
 
           <Card className="shadow-2xl">
-            <div className="p-6 space-y-4">
+            <div className="space-y-4 p-6">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Demo Result</span>
-                <span className="rounded-full bg-emerald-400/10 px-3 py-1 text-sm text-emerald-300">Completed</span>
+                <span className="rounded-full bg-emerald-400/10 px-3 py-1 text-sm text-emerald-300">
+                  Completed
+                </span>
               </div>
+
               <div className="grid grid-cols-2 gap-3">
                 <Metric label="Accuracy" value="99.33%" />
                 <Metric label="Test samples" value="300" />
@@ -188,6 +201,7 @@ export default function SDNIsolationForestDemo() {
           title="Our Isolation Forest demo pipeline"
           text="This keeps the original demo structure: synthetic data, preprocessing, model, evaluation, and SDN alert/policy action."
         />
+
         <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <Card>
             <div className="p-6">
@@ -196,6 +210,7 @@ export default function SDNIsolationForestDemo() {
                   <Play className="mr-2 h-5 w-5" />
                   {running ? "Running Demo..." : "Run Pipeline"}
                 </Button>
+
                 <Button
                   variant="secondary"
                   onClick={() => {
@@ -207,11 +222,13 @@ export default function SDNIsolationForestDemo() {
                   Reset
                 </Button>
               </div>
+
               <div className="space-y-3">
                 {pipelineSteps.map((step) => {
                   const Icon = step.icon;
                   const isActive = step.id === activeStep;
                   const isDone = step.id < activeStep;
+
                   return (
                     <button
                       key={step.id}
@@ -223,9 +240,14 @@ export default function SDNIsolationForestDemo() {
                       }`}
                     >
                       <div className="flex items-center gap-4">
-                        <div className={`rounded-2xl p-3 ${isActive ? "bg-cyan-400 text-slate-950" : "bg-slate-800 text-slate-300"}`}>
+                        <div
+                          className={`rounded-2xl p-3 ${
+                            isActive ? "bg-cyan-400 text-slate-950" : "bg-slate-800 text-slate-300"
+                          }`}
+                        >
                           {isDone ? <CheckCircle2 className="h-5 w-5" /> : <Icon className="h-5 w-5" />}
                         </div>
+
                         <div>
                           <div className="font-semibold">{step.title}</div>
                           <div className="text-sm text-slate-400">{step.badge}</div>
@@ -251,12 +273,14 @@ export default function SDNIsolationForestDemo() {
                   <div className="rounded-2xl bg-cyan-400 p-3 text-slate-950">
                     <ActiveIcon className="h-6 w-6" />
                   </div>
+
                   <div>
                     <div className="text-sm text-cyan-300">Step {current.id}</div>
                     <h2 className="text-3xl font-bold">{current.title}</h2>
                   </div>
                 </div>
-                <p className="text-slate-300 leading-7">{current.text}</p>
+
+                <p className="leading-7 text-slate-300">{current.text}</p>
               </motion.div>
             </div>
 
@@ -270,6 +294,7 @@ export default function SDNIsolationForestDemo() {
           <Card>
             <div className="p-6">
               <h2 className="mb-4 text-2xl font-semibold">Traffic Samples</h2>
+
               <div className="overflow-hidden rounded-2xl border border-slate-800">
                 <table className="w-full text-sm">
                   <thead className="bg-slate-950/70 text-slate-400">
@@ -280,6 +305,7 @@ export default function SDNIsolationForestDemo() {
                       <th className="p-3 text-left">Policy Action</th>
                     </tr>
                   </thead>
+
                   <tbody>
                     {trafficSamples.map((row, index) => (
                       <motion.tr
@@ -291,11 +317,19 @@ export default function SDNIsolationForestDemo() {
                       >
                         <td className="p-3 font-medium">{row.id}</td>
                         <td className="p-3">{row.score.toFixed(2)}</td>
+
                         <td className="p-3">
-                          <span className={`rounded-full px-3 py-1 text-xs ${row.status === "Anomaly" ? "bg-rose-400/10 text-rose-300" : "bg-emerald-400/10 text-emerald-300"}`}>
+                          <span
+                            className={`rounded-full px-3 py-1 text-xs ${
+                              row.status === "Anomaly"
+                                ? "bg-rose-400/10 text-rose-300"
+                                : "bg-emerald-400/10 text-emerald-300"
+                            }`}
+                          >
                             {row.status}
                           </span>
                         </td>
+
                         <td className="p-3 text-slate-300">{row.action}</td>
                       </motion.tr>
                     ))}
@@ -308,6 +342,7 @@ export default function SDNIsolationForestDemo() {
           <Card>
             <div className="p-6">
               <h2 className="mb-4 text-2xl font-semibold">Evaluation Summary</h2>
+
               <div className="grid grid-cols-2 gap-3">
                 {confusion.map((item) => (
                   <div key={item.label} className={`rounded-2xl p-5 ${item.tone}`}>
@@ -316,12 +351,14 @@ export default function SDNIsolationForestDemo() {
                   </div>
                 ))}
               </div>
+
               <div className="mt-5 rounded-2xl border border-slate-800 bg-slate-950/50 p-4 text-sm leading-6 text-slate-300">
                 <div className="mb-2 flex items-center gap-2 font-semibold text-slate-100">
                   <AlertTriangle className="h-4 w-4 text-amber-300" />
                   Important note
                 </div>
-                True labels are used only for evaluation. The SDN policy simulation uses model prediction and anomaly score, because a real controller does not know the true label of live traffic.
+                True labels are used only for evaluation. The SDN policy simulation uses model prediction and anomaly score,
+                because a real controller does not know the true label of live traffic.
               </div>
             </div>
           </Card>
@@ -336,7 +373,7 @@ function SectionTitle({ eyebrow, title, text }) {
     <div className="space-y-2">
       <div className="text-sm font-semibold uppercase tracking-wider text-cyan-300">{eyebrow}</div>
       <h2 className="text-3xl font-bold md:text-4xl">{title}</h2>
-      <p className="max-w-4xl text-slate-300 leading-7">{text}</p>
+      <p className="max-w-4xl leading-7 text-slate-300">{text}</p>
     </div>
   );
 }
@@ -344,61 +381,95 @@ function SectionTitle({ eyebrow, title, text }) {
 function SDNIntroSection() {
   return (
     <Card>
-      <div className="grid gap-6 p-6 lg:grid-cols-[1fr_1.1fr]">
+      <div className="grid gap-6 p-6 lg:grid-cols-2">
         <div className="space-y-4">
           <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
             <div className="mb-2 flex items-center gap-2 text-cyan-200">
               <Network className="h-5 w-5" />
               Traditional network
             </div>
+
             <p className="text-sm leading-6 text-slate-300">
-              Each device usually makes its own forwarding decisions. Management can become complex when the network grows.
+              In a traditional network, each switch or router has its own control logic.
+              Every device participates in deciding how packets should be forwarded.
             </p>
           </div>
+
+          <NormalNetworkDiagram />
+        </div>
+
+        <div className="space-y-4">
           <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
             <div className="mb-2 flex items-center gap-2 text-cyan-200">
               <RadioTower className="h-5 w-5" />
               SDN network
             </div>
+
             <p className="text-sm leading-6 text-slate-300">
-              The controller has a central view of the network and can install rules into switches dynamically.
+              In SDN, the control logic is moved to a central controller.
+              The switch mainly forwards packets based on rules installed by the controller.
             </p>
           </div>
-        </div>
 
-        <div className="relative h-[360px] rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
-          <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <line x1="18" y1="70" x2="48" y2="55" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
-            <line x1="18" y1="30" x2="48" y2="55" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
-            <line x1="48" y1="55" x2="76" y2="70" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
-            <line x1="48" y1="55" x2="76" y2="30" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
-            <line x1="48" y1="55" x2="50" y2="18" stroke="rgba(251,191,36,.7)" strokeWidth="0.9" strokeDasharray="3 3" />
-          </svg>
-
-          <NetworkNode x="18%" y="70%" label="Host" icon={Server} />
-          <NetworkNode x="18%" y="30%" label="Host" icon={Server} />
-          <NetworkNode x="48%" y="55%" label="SDN Switch" icon={Router} />
-          <NetworkNode x="76%" y="70%" label="Server" icon={Server} />
-          <NetworkNode x="76%" y="30%" label="Server" icon={Server} />
-          <NetworkNode x="50%" y="18%" label="Controller" icon={RadioTower} highlight />
-
-          <motion.div
-            className="absolute h-4 w-4 rounded-full bg-cyan-300 shadow-lg shadow-cyan-300/50"
-            animate={{ left: ["18%", "48%", "76%"], top: ["70%", "55%", "30%"] }}
-            transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="absolute h-3 w-3 rounded-full bg-amber-300 shadow-lg shadow-amber-300/50"
-            animate={{ left: ["50%", "48%"], top: ["18%", "55%"] }}
-            transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
-          />
-
-          <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-slate-800 bg-slate-900/90 p-4 text-sm leading-6 text-slate-300">
-            <span className="text-cyan-200 font-semibold">Data plane:</span> packet forwarding. <span className="text-amber-200 font-semibold">Control plane:</span> controller decisions and flow rules.
-          </div>
+          <SDNNetworkDiagram />
         </div>
       </div>
     </Card>
+  );
+}
+
+function NormalNetworkDiagram() {
+  return (
+    <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
+      <div className="relative h-[300px]">
+        <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <line x1="18" y1="25" x2="50" y2="35" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
+          <line x1="18" y1="75" x2="50" y2="65" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
+          <line x1="50" y1="35" x2="50" y2="65" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
+          <line x1="50" y1="35" x2="82" y2="25" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
+          <line x1="50" y1="65" x2="82" y2="75" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
+        </svg>
+
+        <NetworkNode x="18%" y="25%" label="Host" icon={Server} />
+        <NetworkNode x="18%" y="75%" label="Host" icon={Server} />
+        <NetworkNode x="50%" y="35%" label="Router" icon={Router} />
+        <NetworkNode x="50%" y="65%" label="Switch" icon={Router} />
+        <NetworkNode x="82%" y="25%" label="Server" icon={Server} />
+        <NetworkNode x="82%" y="75%" label="Server" icon={Server} />
+      </div>
+
+      <div className="mt-5 rounded-2xl border border-slate-800 bg-slate-900 p-4 text-sm leading-6 text-slate-300">
+        <span className="font-semibold text-cyan-200">Traditional:</span> forwarding and control decisions are distributed across network devices.
+      </div>
+    </div>
+  );
+}
+
+function SDNNetworkDiagram() {
+  return (
+    <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
+      <div className="relative h-[300px]">
+        <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <line x1="18" y1="70" x2="48" y2="55" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
+          <line x1="18" y1="30" x2="48" y2="55" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
+          <line x1="48" y1="55" x2="76" y2="70" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
+          <line x1="48" y1="55" x2="76" y2="30" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
+          <line x1="48" y1="55" x2="50" y2="18" stroke="rgba(251,191,36,.7)" strokeWidth="0.9" strokeDasharray="3 3" />
+        </svg>
+
+        <NetworkNode x="18%" y="70%" label="Host" icon={Server} />
+        <NetworkNode x="18%" y="30%" label="Host" icon={Server} />
+        <NetworkNode x="48%" y="55%" label="SDN Switch" icon={Router} />
+        <NetworkNode x="76%" y="70%" label="Server" icon={Server} />
+        <NetworkNode x="76%" y="30%" label="Server" icon={Server} />
+        <NetworkNode x="50%" y="18%" label="Controller" icon={RadioTower} highlight />
+      </div>
+
+      <div className="mt-5 rounded-2xl border border-slate-800 bg-slate-900 p-4 text-sm leading-6 text-slate-300">
+        <span className="font-semibold text-cyan-200">Data plane:</span> packet forwarding.{" "}
+        <span className="font-semibold text-amber-200">Control plane:</span> controller decisions and flow rules.
+      </div>
+    </div>
   );
 }
 
@@ -406,49 +477,60 @@ function InternetTrafficAttackSection() {
   return (
     <Card>
       <div className="grid gap-6 p-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="relative h-[380px] rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
-          <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <line x1="15" y1="50" x2="45" y2="50" stroke="rgba(34,211,238,.45)" strokeWidth="0.8" />
-            <line x1="45" y1="50" x2="75" y2="50" stroke="rgba(34,211,238,.45)" strokeWidth="0.8" />
-            <line x1="15" y1="22" x2="45" y2="50" stroke="rgba(244,63,94,.45)" strokeWidth="0.8" />
-            <line x1="15" y1="78" x2="45" y2="50" stroke="rgba(244,63,94,.45)" strokeWidth="0.8" />
-          </svg>
+        <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
+          <div className="relative h-[300px]">
+            <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <line x1="15" y1="50" x2="45" y2="50" stroke="rgba(34,211,238,.45)" strokeWidth="0.8" />
+              <line x1="45" y1="50" x2="75" y2="50" stroke="rgba(34,211,238,.45)" strokeWidth="0.8" />
+              <line x1="15" y1="22" x2="45" y2="50" stroke="rgba(244,63,94,.45)" strokeWidth="0.8" />
+              <line x1="15" y1="78" x2="45" y2="50" stroke="rgba(244,63,94,.45)" strokeWidth="0.8" />
+            </svg>
 
-          <NetworkNode x="15%" y="50%" label="Internet" icon={Globe} highlight />
-          <NetworkNode x="15%" y="22%" label="Attacker" icon={Zap} danger />
-          <NetworkNode x="15%" y="78%" label="Bot traffic" icon={Zap} danger />
-          <NetworkNode x="45%" y="50%" label="SDN Switch" icon={Router} />
-          <NetworkNode x="75%" y="50%" label="Protected Server" icon={Lock} />
+            <NetworkNode x="15%" y="50%" label="Internet" icon={Globe} highlight />
+            <NetworkNode x="15%" y="22%" label="Attacker" icon={Zap} danger />
+            <NetworkNode x="15%" y="78%" label="Bot traffic" icon={Zap} danger />
+            <NetworkNode x="45%" y="50%" label="SDN Switch" icon={Router} />
+            <NetworkNode x="75%" y="50%" label="Protected Server" icon={Lock} />
 
-          {[0, 1, 2].map((i) => (
-            <motion.div
-              key={`normal-${i}`}
-              className="absolute h-3 w-3 rounded-full bg-cyan-300 shadow-lg shadow-cyan-300/50"
-              animate={{ left: ["15%", "45%", "75%"], top: ["50%", "50%", "50%"] }}
-              transition={{ repeat: Infinity, duration: 3, delay: i * 0.45, ease: "easeInOut" }}
-            />
-          ))}
-          {[0, 1, 2, 3].map((i) => (
-            <motion.div
-              key={`attack-${i}`}
-              className="absolute h-3 w-3 rounded-full bg-rose-400 shadow-lg shadow-rose-400/50"
-              animate={{ left: ["15%", "45%", "75%"], top: i % 2 === 0 ? ["22%", "50%", "50%"] : ["78%", "50%", "50%"] }}
-              transition={{ repeat: Infinity, duration: 2.1, delay: i * 0.25, ease: "easeInOut" }}
-            />
-          ))}
+            {[0, 1, 2].map((i) => (
+              <motion.div
+                key={`normal-${i}`}
+                className="absolute h-3 w-3 rounded-full bg-cyan-300 shadow-lg shadow-cyan-300/50"
+                animate={{ left: ["15%", "45%", "75%"], top: ["50%", "50%", "50%"] }}
+                transition={{ repeat: Infinity, duration: 3, delay: i * 0.45, ease: "easeInOut" }}
+              />
+            ))}
 
-          <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-slate-800 bg-slate-900/90 p-4 text-sm leading-6 text-slate-300">
-            The red packets represent simplified attack-like behavior, such as unusually high packet rate, abnormal entropy, or suspicious traffic volume.
+            {[0, 1, 2, 3].map((i) => (
+              <motion.div
+                key={`attack-${i}`}
+                className="absolute h-3 w-3 rounded-full bg-rose-400 shadow-lg shadow-rose-400/50"
+                animate={{
+                  left: ["15%", "45%", "75%"],
+                  top: i % 2 === 0 ? ["22%", "50%", "50%"] : ["78%", "50%", "50%"],
+                }}
+                transition={{ repeat: Infinity, duration: 2.1, delay: i * 0.25, ease: "easeInOut" }}
+              />
+            ))}
+          </div>
+
+          <div className="mt-5 rounded-2xl border border-slate-800 bg-slate-900 p-4 text-sm leading-6 text-slate-300">
+            The red packets represent simplified attack-like behavior, such as unusually high packet rate, abnormal entropy,
+            or suspicious traffic volume.
           </div>
         </div>
 
         <div className="space-y-4">
           <InfoBox title="What we simulate" icon={Database}>
-            We do not simulate the full internet. We simulate measurable network flow features such as packet rate, byte rate, error rate, traffic volume, port usage rate, and traffic entropy.
+            We do not simulate the full internet. We simulate measurable network flow features such as packet rate,
+            byte rate, error rate, traffic volume, port usage rate, and traffic entropy.
           </InfoBox>
+
           <InfoBox title="What an attack looks like in the demo" icon={AlertTriangle}>
-            An attack-like flow is represented as traffic that is statistically different from normal flows. For example, packet rate or entropy may become much higher than usual.
+            An attack-like flow is represented as traffic that is statistically different from normal flows.
+            For example, packet rate or entropy may become much higher than usual.
           </InfoBox>
+
           <InfoBox title="Important limitation" icon={ShieldAlert}>
             This is not a real cyberattack simulation. It is a visual and statistical demonstration of anomalous traffic detection.
           </InfoBox>
@@ -466,7 +548,11 @@ function SDNWorkingSection() {
           <FlowBox title="1. Traffic arrives" icon={Globe} text="Network flows enter the SDN switch." />
           <FlowBox title="2. Flow features" icon={Activity} text="Features are extracted or monitored." />
           <FlowBox title="3. ML decision" icon={Brain} text="Isolation Forest predicts normal or anomaly." />
-          <FlowBox title="4. Policy update" icon={ShieldAlert} text="Controller installs a rule: allow, monitor, rate-limit, or block." />
+          <FlowBox
+            title="4. Policy update"
+            icon={ShieldAlert}
+            text="Controller installs a rule: allow, monitor, rate-limit, or block."
+          />
         </div>
 
         <div className="relative mt-8 h-[210px] rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
@@ -486,7 +572,10 @@ function SDNWorkingSection() {
 
           <motion.div
             className="absolute h-4 w-4 rounded-full bg-cyan-300 shadow-lg shadow-cyan-300/50"
-            animate={{ left: ["10%", "33%", "56%", "78%", "56%", "33%"], top: ["50%", "50%", "25%", "25%", "75%", "50%"] }}
+            animate={{
+              left: ["10%", "33%", "56%", "78%", "56%", "33%"],
+              top: ["50%", "50%", "25%", "25%", "75%", "50%"],
+            }}
             transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
           />
         </div>
@@ -522,11 +611,13 @@ function PipelineAnimation({ activeStep }) {
           className="absolute -translate-x-1/2 -translate-y-1/2"
           style={{ left: `${node.x}%`, top: `${node.y}%` }}
         >
-          <div className={`grid h-20 w-20 place-items-center rounded-3xl border text-center text-xs font-semibold shadow-xl ${
-            activeStep >= i + 1
-              ? "border-cyan-300 bg-cyan-300 text-slate-950"
-              : "border-slate-700 bg-slate-900 text-slate-300"
-          }`}>
+          <div
+            className={`grid h-20 w-20 place-items-center rounded-3xl border text-center text-xs font-semibold shadow-xl ${
+              activeStep >= i + 1
+                ? "border-cyan-300 bg-cyan-300 text-slate-950"
+                : "border-slate-700 bg-slate-900 text-slate-300"
+            }`}
+          >
             {node.label}
           </div>
         </motion.div>
@@ -535,14 +626,33 @@ function PipelineAnimation({ activeStep }) {
       <motion.div
         className="absolute h-4 w-4 rounded-full bg-emerald-300 shadow-lg shadow-emerald-300/50"
         animate={{
-          left: activeStep === 1 ? "14%" : activeStep === 2 ? "32%" : activeStep === 3 ? "50%" : activeStep === 4 ? "68%" : "86%",
-          top: activeStep === 1 ? "42%" : activeStep === 2 ? "20%" : activeStep === 3 ? "42%" : activeStep === 4 ? "20%" : "42%",
+          left:
+            activeStep === 1
+              ? "14%"
+              : activeStep === 2
+              ? "32%"
+              : activeStep === 3
+              ? "50%"
+              : activeStep === 4
+              ? "68%"
+              : "86%",
+          top:
+            activeStep === 1
+              ? "42%"
+              : activeStep === 2
+              ? "20%"
+              : activeStep === 3
+              ? "42%"
+              : activeStep === 4
+              ? "20%"
+              : "42%",
         }}
         transition={{ type: "spring", stiffness: 90, damping: 15 }}
       />
 
       <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-slate-800 bg-slate-900/80 p-4">
         <div className="mb-2 text-sm font-semibold text-cyan-200">Live pipeline message</div>
+
         <p className="text-sm text-slate-300">
           {activeStep === 1 && "Synthetic SDN traffic is generated with normal and anomalous samples."}
           {activeStep === 2 && "Features are scaled before entering the machine learning model."}
@@ -586,6 +696,7 @@ function InfoBox({ title, children, icon: Icon }) {
         <Icon className="h-5 w-5" />
         <span className="font-semibold">{title}</span>
       </div>
+
       <p className="text-sm leading-6 text-slate-300">{children}</p>
     </div>
   );
@@ -595,7 +706,9 @@ function FlowBox({ title, text, icon: Icon }) {
   return (
     <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
       <Icon className="mb-3 h-6 w-6 text-cyan-300" />
+
       <div className="font-semibold text-slate-100">{title}</div>
+
       <p className="mt-2 text-sm leading-6 text-slate-400">{text}</p>
     </div>
   );
