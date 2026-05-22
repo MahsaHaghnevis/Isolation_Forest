@@ -143,7 +143,7 @@ export default function SDNIsolationForestDemo() {
               className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-200"
             >
               <Server className="h-4 w-4" />
-              SDN Security Demo · Isolation Forest
+              SDN Security  · Isolation Forest
             </motion.div>
 
             <h1 className="text-4xl font-bold tracking-tight md:text-6xl">
