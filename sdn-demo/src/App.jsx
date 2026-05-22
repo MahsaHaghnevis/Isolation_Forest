@@ -1,37 +1,29 @@
-import React, { useMemo, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ShieldAlert, Network, Brain, Activity, Gauge, Server, Play, RotateCcw, CheckCircle2, AlertTriangle } from "lucide-react";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import {
+  Activity,
+  AlertTriangle,
+  Brain,
+  CheckCircle2,
+  Database,
+  Gauge,
+  Globe,
+  Lock,
+  Network,
+  Play,
+  RadioTower,
+  RotateCcw,
+  Router,
+  Server,
+  ShieldAlert,
+  Zap,
+} from "lucide-react";
 
-function Card({ className = "", children }) {
-  return <div className={`border ${className}`}>{children}</div>;
-}
-
-function CardContent({ className = "", children }) {
-  return <div className={className}>{children}</div>;
-}
-
-function Button({ className = "", variant, disabled, onClick, children }) {
-  const base =
-    variant === "secondary"
-      ? "bg-slate-800 text-slate-100 hover:bg-slate-700"
-      : "bg-slate-100 text-slate-950 hover:bg-slate-200";
-
-  return (
-    <button
-      disabled={disabled}
-      onClick={onClick}
-      className={`${base} inline-flex items-center justify-center font-semibold disabled:opacity-60 ${className}`}
-    >
-      {children}
-    </button>
-  );
-}
-
-const steps = [
+const pipelineSteps = [
   {
     id: 1,
     title: "Synthetic SDN Traffic",
-    icon: Network,
+    icon: Database,
     text: "We generate simulated network traffic with normal and anomalous samples, similar to the paper's synthetic data approach.",
     badge: "Data Generation",
   },
@@ -66,12 +58,12 @@ const steps = [
 ];
 
 const trafficSamples = [
-  { id: "F-001", packet: 0.12, entropy: 0.20, score: 0.08, status: "Normal", action: "No action" },
-  { id: "F-014", packet: 0.31, entropy: 0.41, score: 0.11, status: "Normal", action: "No action" },
-  { id: "F-027", packet: 4.86, entropy: 5.22, score: 0.79, status: "Anomaly", action: "Block / Rate-limit" },
-  { id: "F-039", packet: 0.17, entropy: 0.33, score: 0.09, status: "Normal", action: "No action" },
-  { id: "F-052", packet: 3.91, entropy: 4.44, score: 0.62, status: "Anomaly", action: "Alert + Monitor" },
-  { id: "F-088", packet: 0.26, entropy: 0.18, score: 0.10, status: "Normal", action: "No action" },
+  { id: "F-001", score: 0.08, status: "Normal", action: "No action" },
+  { id: "F-014", score: 0.11, status: "Normal", action: "No action" },
+  { id: "F-027", score: 0.79, status: "Anomaly", action: "Block / Rate-limit" },
+  { id: "F-039", score: 0.09, status: "Normal", action: "No action" },
+  { id: "F-052", score: 0.62, status: "Anomaly", action: "Alert + Monitor" },
+  { id: "F-088", score: 0.10, status: "Normal", action: "No action" },
 ];
 
 const confusion = [
@@ -81,27 +73,50 @@ const confusion = [
   { label: "True Anomaly", value: 30, tone: "bg-indigo-100 text-indigo-800" },
 ];
 
+function Button({ children, onClick, disabled, variant = "primary" }) {
+  const style =
+    variant === "secondary"
+      ? "bg-slate-800 text-slate-100 hover:bg-slate-700"
+      : "bg-slate-100 text-slate-950 hover:bg-slate-200";
+
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`${style} inline-flex items-center justify-center rounded-2xl px-5 py-4 font-semibold transition disabled:opacity-60`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function Card({ children, className = "" }) {
+  return <div className={`rounded-3xl border border-slate-800 bg-slate-900/70 ${className}`}>{children}</div>;
+}
+
+function Metric({ label, value }) {
+  return (
+    <div className="rounded-2xl border border-slate-800 bg-slate-950/50 p-4">
+      <div className="text-sm text-slate-400">{label}</div>
+      <div className="mt-1 text-2xl font-bold text-slate-100">{value}</div>
+    </div>
+  );
+}
+
 export default function SDNIsolationForestDemo() {
   const [activeStep, setActiveStep] = useState(1);
   const [running, setRunning] = useState(false);
 
-  const current = steps.find((s) => s.id === activeStep) || steps[0];
+  const current = pipelineSteps.find((s) => s.id === activeStep) || pipelineSteps[0];
   const ActiveIcon = current.icon;
 
-  const stats = useMemo(() => {
-    const totalAlerts = 32;
-    const highRisk = 14;
-    const monitor = totalAlerts - highRisk;
-    return { accuracy: "99.33%", totalAlerts, highRisk, monitor, policyChanges: totalAlerts };
-  }, []);
-
-  const runDemo = () => {
+  const runPipeline = () => {
     setRunning(true);
     setActiveStep(1);
     let step = 1;
     const timer = setInterval(() => {
       step += 1;
-      if (step > steps.length) {
+      if (step > pipelineSteps.length) {
         clearInterval(timer);
         setRunning(false);
         return;
@@ -111,9 +126,9 @@ export default function SDNIsolationForestDemo() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 p-6 md:p-10">
-      <div className="mx-auto max-w-7xl space-y-8">
-        <header className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr] items-center">
+    <div className="min-h-screen bg-slate-950 p-6 text-slate-100 md:p-10">
+      <div className="mx-auto max-w-7xl space-y-10">
+        <header className="grid items-center gap-6 lg:grid-cols-[1.25fr_0.75fr]">
           <div className="space-y-5">
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -123,54 +138,77 @@ export default function SDNIsolationForestDemo() {
               <Server className="h-4 w-4" />
               SDN Security Demo · Isolation Forest
             </motion.div>
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-              Animated Anomaly Detection Pipeline
+            <h1 className="text-4xl font-bold tracking-tight md:text-6xl">
+              SDN Anomaly Detection Demo
             </h1>
-            <p className="max-w-3xl text-lg text-slate-300 leading-8">
-              This webpage demonstrates how synthetic SDN traffic is processed, analyzed by an Isolation Forest model,
-              evaluated, and then converted into simulated SDN alerts and policy actions.
+            <p className="max-w-3xl text-lg leading-8 text-slate-300">
+              This webpage explains what SDN is, how network traffic can include attacks, how SDN reacts, and then shows our Isolation Forest demo results.
             </p>
-            <div className="flex flex-wrap gap-3">
-              <Button onClick={runDemo} disabled={running} className="rounded-2xl px-5 py-6 text-base">
-                <Play className="mr-2 h-5 w-5" />
-                {running ? "Running Demo..." : "Run Animated Demo"}
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  setActiveStep(1);
-                  setRunning(false);
-                }}
-                className="rounded-2xl px-5 py-6 text-base"
-              >
-                <RotateCcw className="mr-2 h-5 w-5" />
-                Reset
-              </Button>
-            </div>
           </div>
 
-          <Card className="rounded-3xl border-slate-800 bg-slate-900/70 shadow-2xl">
-            <CardContent className="p-6 space-y-4">
+          <Card className="shadow-2xl">
+            <div className="p-6 space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Demo Result</span>
                 <span className="rounded-full bg-emerald-400/10 px-3 py-1 text-sm text-emerald-300">Completed</span>
               </div>
               <div className="grid grid-cols-2 gap-3">
-                <Metric label="Accuracy" value={stats.accuracy} />
-                <Metric label="Alerts" value={stats.totalAlerts} />
-                <Metric label="High Risk" value={stats.highRisk} />
-                <Metric label="Monitor" value={stats.monitor} />
+                <Metric label="Accuracy" value="99.33%" />
+                <Metric label="Test samples" value="300" />
+                <Metric label="Alerts" value="32" />
+                <Metric label="Policy changes" value="32" />
               </div>
-            </CardContent>
+            </div>
           </Card>
         </header>
 
+        <SectionTitle
+          eyebrow="Section 1"
+          title="What is SDN?"
+          text="SDN separates the control plane from the data plane. Switches forward packets, while the SDN controller centrally decides how traffic should be handled."
+        />
+        <SDNIntroSection />
+
+        <SectionTitle
+          eyebrow="Section 2"
+          title="How traffic and attacks enter the network"
+          text="This is a simplified visual explanation: normal user traffic and suspicious attack-like traffic both enter the network. The system monitors flow features before the controller decides how to respond."
+        />
+        <InternetTrafficAttackSection />
+
+        <SectionTitle
+          eyebrow="Section 3"
+          title="How SDN works during anomaly detection"
+          text="The SDN switch forwards traffic metadata to the controller. The controller can ask the ML module for an anomaly score and then install a policy rule back into the switch."
+        />
+        <SDNWorkingSection />
+
+        <SectionTitle
+          eyebrow="Section 4"
+          title="Our Isolation Forest demo pipeline"
+          text="This keeps the original demo structure: synthetic data, preprocessing, model, evaluation, and SDN alert/policy action."
+        />
         <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <Card className="rounded-3xl border-slate-800 bg-slate-900/70">
-            <CardContent className="p-6">
-              <h2 className="mb-5 text-2xl font-semibold">Pipeline Steps</h2>
+          <Card>
+            <div className="p-6">
+              <div className="mb-5 flex flex-wrap gap-3">
+                <Button onClick={runPipeline} disabled={running}>
+                  <Play className="mr-2 h-5 w-5" />
+                  {running ? "Running Demo..." : "Run Pipeline"}
+                </Button>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setActiveStep(1);
+                    setRunning(false);
+                  }}
+                >
+                  <RotateCcw className="mr-2 h-5 w-5" />
+                  Reset
+                </Button>
+              </div>
               <div className="space-y-3">
-                {steps.map((step) => {
+                {pipelineSteps.map((step) => {
                   const Icon = step.icon;
                   const isActive = step.id === activeStep;
                   const isDone = step.id < activeStep;
@@ -197,45 +235,40 @@ export default function SDNIsolationForestDemo() {
                   );
                 })}
               </div>
-            </CardContent>
+            </div>
           </Card>
 
-          <Card className="overflow-hidden rounded-3xl border-slate-800 bg-slate-900/70">
-            <CardContent className="p-0">
-              <div className="border-b border-slate-800 p-6">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeStep}
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -16 }}
-                    transition={{ duration: 0.35 }}
-                    className="space-y-3"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="rounded-2xl bg-cyan-400 p-3 text-slate-950">
-                        <ActiveIcon className="h-6 w-6" />
-                      </div>
-                      <div>
-                        <div className="text-sm text-cyan-300">Step {current.id}</div>
-                        <h2 className="text-3xl font-bold">{current.title}</h2>
-                      </div>
-                    </div>
-                    <p className="text-slate-300 leading-7">{current.text}</p>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+          <Card className="overflow-hidden">
+            <div className="border-b border-slate-800 p-6">
+              <motion.div
+                key={activeStep}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35 }}
+                className="space-y-3"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="rounded-2xl bg-cyan-400 p-3 text-slate-950">
+                    <ActiveIcon className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-cyan-300">Step {current.id}</div>
+                    <h2 className="text-3xl font-bold">{current.title}</h2>
+                  </div>
+                </div>
+                <p className="text-slate-300 leading-7">{current.text}</p>
+              </motion.div>
+            </div>
 
-              <div className="relative h-[360px] p-6">
-                <NetworkAnimation activeStep={activeStep} />
-              </div>
-            </CardContent>
+            <div className="relative h-[360px] p-6">
+              <PipelineAnimation activeStep={activeStep} />
+            </div>
           </Card>
         </section>
 
         <section className="grid gap-6 lg:grid-cols-2">
-          <Card className="rounded-3xl border-slate-800 bg-slate-900/70">
-            <CardContent className="p-6">
+          <Card>
+            <div className="p-6">
               <h2 className="mb-4 text-2xl font-semibold">Traffic Samples</h2>
               <div className="overflow-hidden rounded-2xl border border-slate-800">
                 <table className="w-full text-sm">
@@ -269,11 +302,11 @@ export default function SDNIsolationForestDemo() {
                   </tbody>
                 </table>
               </div>
-            </CardContent>
+            </div>
           </Card>
 
-          <Card className="rounded-3xl border-slate-800 bg-slate-900/70">
-            <CardContent className="p-6">
+          <Card>
+            <div className="p-6">
               <h2 className="mb-4 text-2xl font-semibold">Evaluation Summary</h2>
               <div className="grid grid-cols-2 gap-3">
                 {confusion.map((item) => (
@@ -288,10 +321,9 @@ export default function SDNIsolationForestDemo() {
                   <AlertTriangle className="h-4 w-4 text-amber-300" />
                   Important note
                 </div>
-                True labels are used only for evaluation. The SDN policy simulation uses model prediction and anomaly score,
-                because a real controller does not know the true label of live traffic.
+                True labels are used only for evaluation. The SDN policy simulation uses model prediction and anomaly score, because a real controller does not know the true label of live traffic.
               </div>
-            </CardContent>
+            </div>
           </Card>
         </section>
       </div>
@@ -299,22 +331,177 @@ export default function SDNIsolationForestDemo() {
   );
 }
 
-function Metric({ label, value }) {
+function SectionTitle({ eyebrow, title, text }) {
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-950/50 p-4">
-      <div className="text-sm text-slate-400">{label}</div>
-      <div className="mt-1 text-2xl font-bold text-slate-100">{value}</div>
+    <div className="space-y-2">
+      <div className="text-sm font-semibold uppercase tracking-wider text-cyan-300">{eyebrow}</div>
+      <h2 className="text-3xl font-bold md:text-4xl">{title}</h2>
+      <p className="max-w-4xl text-slate-300 leading-7">{text}</p>
     </div>
   );
 }
 
-function NetworkAnimation({ activeStep }) {
+function SDNIntroSection() {
+  return (
+    <Card>
+      <div className="grid gap-6 p-6 lg:grid-cols-[1fr_1.1fr]">
+        <div className="space-y-4">
+          <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
+            <div className="mb-2 flex items-center gap-2 text-cyan-200">
+              <Network className="h-5 w-5" />
+              Traditional network
+            </div>
+            <p className="text-sm leading-6 text-slate-300">
+              Each device usually makes its own forwarding decisions. Management can become complex when the network grows.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
+            <div className="mb-2 flex items-center gap-2 text-cyan-200">
+              <RadioTower className="h-5 w-5" />
+              SDN network
+            </div>
+            <p className="text-sm leading-6 text-slate-300">
+              The controller has a central view of the network and can install rules into switches dynamically.
+            </p>
+          </div>
+        </div>
+
+        <div className="relative h-[360px] rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
+          <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <line x1="18" y1="70" x2="48" y2="55" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
+            <line x1="18" y1="30" x2="48" y2="55" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
+            <line x1="48" y1="55" x2="76" y2="70" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
+            <line x1="48" y1="55" x2="76" y2="30" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
+            <line x1="48" y1="55" x2="50" y2="18" stroke="rgba(251,191,36,.7)" strokeWidth="0.9" strokeDasharray="3 3" />
+          </svg>
+
+          <NetworkNode x="18%" y="70%" label="Host" icon={Server} />
+          <NetworkNode x="18%" y="30%" label="Host" icon={Server} />
+          <NetworkNode x="48%" y="55%" label="SDN Switch" icon={Router} />
+          <NetworkNode x="76%" y="70%" label="Server" icon={Server} />
+          <NetworkNode x="76%" y="30%" label="Server" icon={Server} />
+          <NetworkNode x="50%" y="18%" label="Controller" icon={RadioTower} highlight />
+
+          <motion.div
+            className="absolute h-4 w-4 rounded-full bg-cyan-300 shadow-lg shadow-cyan-300/50"
+            animate={{ left: ["18%", "48%", "76%"], top: ["70%", "55%", "30%"] }}
+            transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute h-3 w-3 rounded-full bg-amber-300 shadow-lg shadow-amber-300/50"
+            animate={{ left: ["50%", "48%"], top: ["18%", "55%"] }}
+            transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
+          />
+
+          <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-slate-800 bg-slate-900/90 p-4 text-sm leading-6 text-slate-300">
+            <span className="text-cyan-200 font-semibold">Data plane:</span> packet forwarding. <span className="text-amber-200 font-semibold">Control plane:</span> controller decisions and flow rules.
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function InternetTrafficAttackSection() {
+  return (
+    <Card>
+      <div className="grid gap-6 p-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="relative h-[380px] rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
+          <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <line x1="15" y1="50" x2="45" y2="50" stroke="rgba(34,211,238,.45)" strokeWidth="0.8" />
+            <line x1="45" y1="50" x2="75" y2="50" stroke="rgba(34,211,238,.45)" strokeWidth="0.8" />
+            <line x1="15" y1="22" x2="45" y2="50" stroke="rgba(244,63,94,.45)" strokeWidth="0.8" />
+            <line x1="15" y1="78" x2="45" y2="50" stroke="rgba(244,63,94,.45)" strokeWidth="0.8" />
+          </svg>
+
+          <NetworkNode x="15%" y="50%" label="Internet" icon={Globe} highlight />
+          <NetworkNode x="15%" y="22%" label="Attacker" icon={Zap} danger />
+          <NetworkNode x="15%" y="78%" label="Bot traffic" icon={Zap} danger />
+          <NetworkNode x="45%" y="50%" label="SDN Switch" icon={Router} />
+          <NetworkNode x="75%" y="50%" label="Protected Server" icon={Lock} />
+
+          {[0, 1, 2].map((i) => (
+            <motion.div
+              key={`normal-${i}`}
+              className="absolute h-3 w-3 rounded-full bg-cyan-300 shadow-lg shadow-cyan-300/50"
+              animate={{ left: ["15%", "45%", "75%"], top: ["50%", "50%", "50%"] }}
+              transition={{ repeat: Infinity, duration: 3, delay: i * 0.45, ease: "easeInOut" }}
+            />
+          ))}
+          {[0, 1, 2, 3].map((i) => (
+            <motion.div
+              key={`attack-${i}`}
+              className="absolute h-3 w-3 rounded-full bg-rose-400 shadow-lg shadow-rose-400/50"
+              animate={{ left: ["15%", "45%", "75%"], top: i % 2 === 0 ? ["22%", "50%", "50%"] : ["78%", "50%", "50%"] }}
+              transition={{ repeat: Infinity, duration: 2.1, delay: i * 0.25, ease: "easeInOut" }}
+            />
+          ))}
+
+          <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-slate-800 bg-slate-900/90 p-4 text-sm leading-6 text-slate-300">
+            The red packets represent simplified attack-like behavior, such as unusually high packet rate, abnormal entropy, or suspicious traffic volume.
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <InfoBox title="What we simulate" icon={Database}>
+            We do not simulate the full internet. We simulate measurable network flow features such as packet rate, byte rate, error rate, traffic volume, port usage rate, and traffic entropy.
+          </InfoBox>
+          <InfoBox title="What an attack looks like in the demo" icon={AlertTriangle}>
+            An attack-like flow is represented as traffic that is statistically different from normal flows. For example, packet rate or entropy may become much higher than usual.
+          </InfoBox>
+          <InfoBox title="Important limitation" icon={ShieldAlert}>
+            This is not a real cyberattack simulation. It is a visual and statistical demonstration of anomalous traffic detection.
+          </InfoBox>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function SDNWorkingSection() {
+  return (
+    <Card>
+      <div className="relative min-h-[420px] p-6">
+        <div className="grid gap-5 md:grid-cols-4">
+          <FlowBox title="1. Traffic arrives" icon={Globe} text="Network flows enter the SDN switch." />
+          <FlowBox title="2. Flow features" icon={Activity} text="Features are extracted or monitored." />
+          <FlowBox title="3. ML decision" icon={Brain} text="Isolation Forest predicts normal or anomaly." />
+          <FlowBox title="4. Policy update" icon={ShieldAlert} text="Controller installs a rule: allow, monitor, rate-limit, or block." />
+        </div>
+
+        <div className="relative mt-8 h-[210px] rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
+          <NetworkNode x="10%" y="50%" label="Flow" icon={Globe} />
+          <NetworkNode x="33%" y="50%" label="Switch" icon={Router} />
+          <NetworkNode x="56%" y="25%" label="Controller" icon={RadioTower} highlight />
+          <NetworkNode x="78%" y="25%" label="ML Model" icon={Brain} />
+          <NetworkNode x="56%" y="75%" label="New Rule" icon={ShieldAlert} danger />
+
+          <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <line x1="10" y1="50" x2="33" y2="50" stroke="rgba(34,211,238,.5)" strokeWidth="0.8" />
+            <line x1="33" y1="50" x2="56" y2="25" stroke="rgba(251,191,36,.6)" strokeWidth="0.8" strokeDasharray="3 3" />
+            <line x1="56" y1="25" x2="78" y2="25" stroke="rgba(251,191,36,.6)" strokeWidth="0.8" strokeDasharray="3 3" />
+            <line x1="78" y1="25" x2="56" y2="75" stroke="rgba(244,63,94,.6)" strokeWidth="0.8" />
+            <line x1="56" y1="75" x2="33" y2="50" stroke="rgba(244,63,94,.6)" strokeWidth="0.8" />
+          </svg>
+
+          <motion.div
+            className="absolute h-4 w-4 rounded-full bg-cyan-300 shadow-lg shadow-cyan-300/50"
+            animate={{ left: ["10%", "33%", "56%", "78%", "56%", "33%"], top: ["50%", "50%", "25%", "25%", "75%", "50%"] }}
+            transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
+          />
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function PipelineAnimation({ activeStep }) {
   const nodes = [
-    { x: 14, y: 42, label: "Host A" },
-    { x: 32, y: 20, label: "Switch" },
-    { x: 50, y: 42, label: "SDN Controller" },
-    { x: 68, y: 20, label: "ML Model" },
-    { x: 86, y: 42, label: "Policy" },
+    { x: 14, y: 42, label: "Traffic Data" },
+    { x: 32, y: 20, label: "Preprocess" },
+    { x: 50, y: 42, label: "Isolation Forest" },
+    { x: 68, y: 20, label: "Evaluation" },
+    { x: 86, y: 42, label: "SDN Policy" },
   ];
 
   return (
@@ -330,16 +517,13 @@ function NetworkAnimation({ activeStep }) {
         <motion.div
           key={node.label}
           initial={{ scale: 0.8, opacity: 0 }}
-          animate={{
-            scale: activeStep >= Math.min(i + 1, 5) ? 1.08 : 1,
-            opacity: 1,
-          }}
+          animate={{ scale: activeStep >= i + 1 ? 1.08 : 1, opacity: 1 }}
           transition={{ duration: 0.4 }}
           className="absolute -translate-x-1/2 -translate-y-1/2"
           style={{ left: `${node.x}%`, top: `${node.y}%` }}
         >
           <div className={`grid h-20 w-20 place-items-center rounded-3xl border text-center text-xs font-semibold shadow-xl ${
-            activeStep >= Math.min(i + 1, 5)
+            activeStep >= i + 1
               ? "border-cyan-300 bg-cyan-300 text-slate-950"
               : "border-slate-700 bg-slate-900 text-slate-300"
           }`}>
@@ -351,30 +535,68 @@ function NetworkAnimation({ activeStep }) {
       <motion.div
         className="absolute h-4 w-4 rounded-full bg-emerald-300 shadow-lg shadow-emerald-300/50"
         animate={{
-          left: activeStep === 1 ? "14%" : activeStep === 2 ? "32%" : activeStep === 3 ? "68%" : activeStep === 4 ? "50%" : "86%",
-          top: activeStep === 1 ? "42%" : activeStep === 2 ? "20%" : activeStep === 3 ? "20%" : activeStep === 4 ? "42%" : "42%",
+          left: activeStep === 1 ? "14%" : activeStep === 2 ? "32%" : activeStep === 3 ? "50%" : activeStep === 4 ? "68%" : "86%",
+          top: activeStep === 1 ? "42%" : activeStep === 2 ? "20%" : activeStep === 3 ? "42%" : activeStep === 4 ? "20%" : "42%",
         }}
         transition={{ type: "spring", stiffness: 90, damping: 15 }}
       />
 
       <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-slate-800 bg-slate-900/80 p-4">
         <div className="mb-2 text-sm font-semibold text-cyan-200">Live pipeline message</div>
-        <AnimatePresence mode="wait">
-          <motion.p
-            key={activeStep}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            className="text-sm text-slate-300"
-          >
-            {activeStep === 1 && "Network traffic samples are generated with normal and anomalous behavior."}
-            {activeStep === 2 && "Features are scaled before entering the machine learning model."}
-            {activeStep === 3 && "Isolation Forest assigns anomaly scores based on how fast each sample is isolated."}
-            {activeStep === 4 && "Predictions are evaluated using the confusion matrix and classification metrics."}
-            {activeStep === 5 && "The controller maps high anomaly scores to alerts and policy actions."}
-          </motion.p>
-        </AnimatePresence>
+        <p className="text-sm text-slate-300">
+          {activeStep === 1 && "Synthetic SDN traffic is generated with normal and anomalous samples."}
+          {activeStep === 2 && "Features are scaled before entering the machine learning model."}
+          {activeStep === 3 && "Isolation Forest assigns anomaly scores based on how fast each sample is isolated."}
+          {activeStep === 4 && "Predictions are evaluated using the confusion matrix and classification metrics."}
+          {activeStep === 5 && "The SDN controller maps anomaly scores to alerts and policy actions."}
+        </p>
       </div>
+    </div>
+  );
+}
+
+function NetworkNode({ x, y, label, icon: Icon, highlight, danger }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="absolute -translate-x-1/2 -translate-y-1/2"
+      style={{ left: x, top: y }}
+    >
+      <div
+        className={`grid h-24 w-24 place-items-center rounded-3xl border text-center text-xs font-semibold shadow-xl ${
+          danger
+            ? "border-rose-400 bg-rose-400/10 text-rose-200"
+            : highlight
+            ? "border-amber-300 bg-amber-300/10 text-amber-100"
+            : "border-slate-700 bg-slate-900 text-slate-200"
+        }`}
+      >
+        <Icon className={`h-6 w-6 ${danger ? "text-rose-300" : highlight ? "text-amber-300" : "text-cyan-300"}`} />
+        <span>{label}</span>
+      </div>
+    </motion.div>
+  );
+}
+
+function InfoBox({ title, children, icon: Icon }) {
+  return (
+    <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
+      <div className="mb-2 flex items-center gap-2 text-cyan-200">
+        <Icon className="h-5 w-5" />
+        <span className="font-semibold">{title}</span>
+      </div>
+      <p className="text-sm leading-6 text-slate-300">{children}</p>
+    </div>
+  );
+}
+
+function FlowBox({ title, text, icon: Icon }) {
+  return (
+    <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
+      <Icon className="mb-3 h-6 w-6 text-cyan-300" />
+      <div className="font-semibold text-slate-100">{title}</div>
+      <p className="mt-2 text-sm leading-6 text-slate-400">{text}</p>
     </div>
   );
 }
