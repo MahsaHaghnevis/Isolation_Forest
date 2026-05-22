@@ -364,6 +364,17 @@ export default function SDNIsolationForestDemo() {
           </Card>
         </section>
       </div>
+      <footer className="border-t border-slate-800 pt-6 text-center text-sm leading-7 text-slate-400">
+  <p>
+    Developed as a practical demo for the Computer Networks course.
+  </p>
+  <p>
+     SDN Anomaly Detection using Isolation Forest
+  </p>
+  <p className="text-cyan-300">
+    Created with sweat and tears by: Mahsa Haghnevis , Fateme Hasan Nia
+  </p>
+</footer>
     </div>
   );
 }
