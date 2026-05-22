@@ -586,79 +586,56 @@ function SDNWorkingSection() {
 
 function PipelineAnimation({ activeStep }) {
   const nodes = [
-    { x: 14, y: 42, label: "Traffic Data" },
-    { x: 32, y: 20, label: "Preprocess" },
-    { x: 50, y: 42, label: "Isolation Forest" },
-    { x: 68, y: 20, label: "Evaluation" },
-    { x: 86, y: 42, label: "SDN Policy" },
+    { x: 14, y: 50, label: "Traffic Data" },
+    { x: 32, y: 50, label: "Preprocess" },
+    { x: 50, y: 50, label: "Isolation Forest" },
+    { x: 68, y: 50, label: "Evaluation" },
+    { x: 86, y: 50, label: "SDN Policy" },
   ];
 
   return (
-    <div className="relative h-full w-full rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
-      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 60" preserveAspectRatio="none">
-        <line x1="14" y1="42" x2="32" y2="20" stroke="rgba(148,163,184,.35)" strokeWidth="0.6" />
-        <line x1="32" y1="20" x2="50" y2="42" stroke="rgba(148,163,184,.35)" strokeWidth="0.6" />
-        <line x1="50" y1="42" x2="68" y2="20" stroke="rgba(148,163,184,.35)" strokeWidth="0.6" />
-        <line x1="68" y1="20" x2="86" y2="42" stroke="rgba(148,163,184,.35)" strokeWidth="0.6" />
-      </svg>
-
-      {nodes.map((node, i) => (
-        <motion.div
-          key={node.label}
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: activeStep >= i + 1 ? 1.08 : 1, opacity: 1 }}
-          transition={{ duration: 0.4 }}
-          className="absolute -translate-x-1/2 -translate-y-1/2"
-          style={{ left: `${node.x}%`, top: `${node.y}%` }}
-        >
-          <div
-            className={`grid h-20 w-20 place-items-center rounded-3xl border text-center text-xs font-semibold shadow-xl ${
-              activeStep >= i + 1
-                ? "border-cyan-300 bg-cyan-300 text-slate-950"
-                : "border-slate-700 bg-slate-900 text-slate-300"
-            }`}
+    <div className="h-full w-full rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
+      <div className="relative h-[230px] rounded-2xl border border-slate-800 bg-slate-950/60">
+        {nodes.map((node, i) => (
+          <motion.div
+            key={node.label}
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: activeStep >= i + 1 ? 1.08 : 1, opacity: 1 }}
+            transition={{ duration: 0.4 }}
+            className="absolute -translate-x-1/2 -translate-y-1/2"
+            style={{ left: `${node.x}%`, top: `${node.y}%` }}
           >
-            {node.label}
-          </div>
-        </motion.div>
-      ))}
+            <div
+              className={`grid h-20 w-20 place-items-center rounded-3xl border text-center text-xs font-semibold shadow-xl ${
+                activeStep >= i + 1
+                  ? "border-cyan-300 bg-cyan-300 text-slate-950"
+                  : "border-slate-700 bg-slate-900 text-slate-300"
+              }`}
+            >
+              {node.label}
+            </div>
+          </motion.div>
+        ))}
 
-      <motion.div
-        className="absolute h-4 w-4 rounded-full bg-emerald-300 shadow-lg shadow-emerald-300/50"
-        animate={{
-          left:
-            activeStep === 1
-              ? "14%"
-              : activeStep === 2
-              ? "32%"
-              : activeStep === 3
-              ? "50%"
-              : activeStep === 4
-              ? "68%"
-              : "86%",
-          top:
-            activeStep === 1
-              ? "42%"
-              : activeStep === 2
-              ? "20%"
-              : activeStep === 3
-              ? "42%"
-              : activeStep === 4
-              ? "20%"
-              : "42%",
-        }}
-        transition={{ type: "spring", stiffness: 90, damping: 15 }}
-      />
+       
+      </div>
 
-      <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-slate-800 bg-slate-900/80 p-4">
-        <div className="mb-2 text-sm font-semibold text-cyan-200">Live pipeline message</div>
+      <div className="mt-5 rounded-2xl border border-slate-800 bg-slate-900/80 p-4">
+        <div className="mb-2 text-sm font-semibold text-cyan-200">
+          Live pipeline message
+        </div>
 
-        <p className="text-sm text-slate-300">
-          {activeStep === 1 && "Synthetic SDN traffic is generated with normal and anomalous samples."}
-          {activeStep === 2 && "Features are scaled before entering the machine learning model."}
-          {activeStep === 3 && "Isolation Forest assigns anomaly scores based on how fast each sample is isolated."}
-          {activeStep === 4 && "Predictions are evaluated using the confusion matrix and classification metrics."}
-          {activeStep === 5 && "The SDN controller maps anomaly scores to alerts and policy actions."}
+        <p className="text-sm leading-6 text-slate-300">
+          {activeStep === 1 &&
+            "Synthetic SDN traffic is generated with normal and anomalous samples."}
+          {activeStep === 2 &&
+            "Features are scaled before entering the machine learning model."}
+          {activeStep === 3 &&
+            "Isolation Forest assigns anomaly scores based on how fast each sample is isolated."}
+          {activeStep === 4 &&
+            "Predictions are evaluated using the confusion matrix and classification metrics."}
+          {activeStep === 5 &&
+            "The SDN controller maps anomaly scores to alerts and policy actions."}
         </p>
       </div>
     </div>
