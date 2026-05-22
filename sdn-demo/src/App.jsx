@@ -594,8 +594,8 @@ function PipelineAnimation({ activeStep }) {
   ];
 
   return (
-    <div className="h-full w-full rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
-      <div className="relative h-[230px] rounded-2xl border border-slate-800 bg-slate-950/60">
+    <div >
+      <div className="relative h-[230px] rounded-3xl border border-slate-800 bg-slate-950/60">
         {nodes.map((node, i) => (
           <motion.div
             key={node.label}
