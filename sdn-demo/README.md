@@ -1,16 +1,41 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+# React Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+This folder contains the React demo for the SDN anomaly detection project.
 
-## React Compiler
+The demo visually explains:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- What SDN is
+- Traditional network vs. SDN
+- Normal and suspicious traffic
+- SDN workflow during anomaly detection
+- Isolation Forest pipeline
+- Model results and simulated policy actions
 
-## Expanding the ESLint configuration
+## Run the demo
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+npm install framer-motion lucide-react
+npm run dev
+```
+
+## In case of not being able to install visit runflare
+```bash
+https://runflare.com/mirrors/npm-mirror/
+```
+
+Then open the local URL shown in the terminal, usually:
+```bash
+http://localhost:5173/
+```
+
+## Notes
+
+This demo is only for educational and presentation purposes.
+It does not connect to a real SDN controller or inspect real network packets.
+
+#Author
+
+Prepared by: Mahsa Haghnevis & Fateme Hasan Nia
