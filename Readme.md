@@ -16,25 +16,42 @@ It includes a short paper review, a Python implementation of the Isolation Fores
 - Simulated SDN alert and policy actions
 - Interactive React demo
 
+## Installation
+
+Before running the Python notebook, install the required packages:
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Result
 
 Final test result:
 
 ```text
-Accuracy: 99.33%
+Accuracy: 81.33%
 
 Confusion Matrix:
-[[268   2]
- [  0  30]]
+[[236  34]
+ [ 22   8]]
 ```
 
-The model detected all anomalous samples in the test set, with two false alerts.
+The model correctly classified 236 normal samples and detected 8 anomalous samples.  
+However, it also produced 34 false alerts and missed 22 real anomalies.
+
+For the SDN policy simulation, the model produced the following actions:
+
+```text
+No action                              258
+Block or rate-limit suspicious flow     30
+Generate alert and monitor flow         12
+```
 
 ## Notes
 
 The dataset is synthetic, so the result is based on a controlled setup.
 This project is mainly for learning, presentation, and understanding how machine learning can be connected to SDN security.
 
-#Author
+## Author
 
 Prepared by: Mahsa Haghnevis & Fateme Hasan Nia
