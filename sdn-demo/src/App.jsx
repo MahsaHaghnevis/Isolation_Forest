@@ -327,7 +327,7 @@ export default function SDNIsolationForestDemo() {
               </motion.div>
             </div>
 
-            <div className="relative h-[360px] p-6">
+            <div className="relative h-90 p-6">
               <PipelineAnimation activeStep={activeStep} />
             </div>
           </Card>
@@ -481,7 +481,7 @@ function SDNIntroSection() {
 function NormalNetworkDiagram() {
   return (
     <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
-      <div className="relative h-[300px]">
+      <div className="relative h-75">
         <svg
           className="absolute inset-0 h-full w-full"
           viewBox="0 0 100 100"
@@ -548,7 +548,7 @@ function NormalNetworkDiagram() {
 function SDNNetworkDiagram() {
   return (
     <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
-      <div className="relative h-[300px]">
+      <div className="relative h-75">
         <svg
           className="absolute inset-0 h-full w-full"
           viewBox="0 0 100 100"
@@ -626,7 +626,7 @@ function InternetTrafficAttackSection() {
     <Card>
       <div className="grid gap-6 p-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
-          <div className="relative h-[300px]">
+          <div className="relative h-75">
             <svg
               className="absolute inset-0 h-full w-full"
               viewBox="0 0 100 100"
@@ -756,7 +756,7 @@ function InternetTrafficAttackSection() {
 function SDNWorkingSection() {
   return (
     <Card>
-      <div className="relative min-h-[420px] p-6">
+      <div className="relative min-h-105 p-6">
         <div className="grid gap-5 md:grid-cols-4">
           <FlowBox
             title="1. Traffic arrives"
@@ -780,7 +780,7 @@ function SDNWorkingSection() {
           />
         </div>
 
-        <div className="relative mt-8 h-[210px] rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
+        <div className="relative mt-8 h-52.5 rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
           <NetworkNode x="10%" y="50%" label="Flow" icon={Globe} />
           <NetworkNode x="33%" y="50%" label="Switch" icon={Router} />
           <NetworkNode
