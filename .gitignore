@@ -48,3 +48,8 @@ plots/
 # Temporary files
 *.tmp
 *.bak
+
+
+# video presentaion
+/videoPresentation
+
