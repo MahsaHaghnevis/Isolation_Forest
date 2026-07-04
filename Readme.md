@@ -52,17 +52,17 @@ Before running the Python notebook, install the required packages:
 pip install -r requirements.txt
 ```
 Then open and run 
-```
+```bash
 main.ipynb
 ```
 ## Run the React Demo Locally
 Go to the sdn_demo folder:
 
-```
+```bash
 cd sdn-demo
 ```
 Run the development server:
-```
+```bash
 npm run dev
 ```
 
@@ -71,7 +71,7 @@ npm run dev
 The first release of this project has been published on GitHub.
 
 Release page:
-```
+```bash
 https://github.com/MahsaHaghnevis/Isolation_Forest
 ```
 

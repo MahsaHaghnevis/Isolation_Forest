@@ -36,7 +36,7 @@ http://localhost:5173/
 The first release of this project has been published on GitHub.
 
 Release page:
-```
+```bash
 https://github.com/MahsaHaghnevis/Isolation_Forest
 ```
 
