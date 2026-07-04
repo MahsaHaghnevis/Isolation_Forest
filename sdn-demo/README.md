@@ -31,6 +31,17 @@ Then open the local URL shown in the terminal, usually:
 http://localhost:5173/
 ```
 
+## Release
+
+The first release of this project has been published on GitHub.
+
+Release page:
+```
+https://github.com/MahsaHaghnevis/Isolation_Forest
+```
+
+The deployed React demo can also be accessed from the release description or directly through the live demo link.
+
 ## Notes
 
 This demo is only for educational and presentation purposes.
